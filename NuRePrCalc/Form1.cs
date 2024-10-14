@@ -27,8 +27,8 @@ namespace NuRePrCalc
 
         private Dictionary<string, string> imageMappings = new Dictionary<string, string>
         {
-            { "Шахматное", "Shah.png" },
-            { "Коридорное", "Kor.png" }
+            { "Шахматное", "D:\\Kursovaya\\Kursach\\NuRePrCalc\\Shah.png" },
+            { "Коридорное", "D:\\Kursovaya\\Kursach\\NuRePrCalc\\Kor.png" }
         };
 
         private Dictionary<string, string> categoryRangeMappings = new Dictionary<string, string>
@@ -162,8 +162,15 @@ namespace NuRePrCalc
             string selectedDescription = comboBoxNuCells.SelectedItem.ToString();
             string imagePath = imageMappings[selectedDescription];
 
-            pictureBoxNu.ImageLocation = imagePath;
-            pictureBoxNu.Load(); 
+            try
+            {
+                // Попытка загрузить изображение
+                pictureBoxNu.Image = Image.FromFile(imagePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadExcelDataAndPlot()
@@ -297,7 +304,7 @@ namespace NuRePrCalc
                     Marshal.ReleaseComObject(excelApp);
                 }
 
-
+                LoadImage();
                 chartVA.Series.Clear();
                 chartVA.ChartAreas.Clear();
                 chartVA.Legends.Clear();
